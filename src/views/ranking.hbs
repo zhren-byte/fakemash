@@ -1,0 +1,32 @@
+<html lang="en">
+
+<head>
+<meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ titulo }}</title>
+    <link href="/styles/output.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+        integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+</head>
+
+<body class="flex h-full flex-col">
+    <nav class="w-full bg-red-500 px-8 py-3">
+        <span class="text-2xl text-white">{{ titulo }}</span>
+    </nav>
+    
+    <div class="w-full flex flex-col items-center h-full">
+        <ul>
+            {{#each ranking}}
+                <li class="bg-red-500 flex flex-row">
+                    <img width="200" height="200" src="https://this-person-does-not-exist.com{{ url }}" alt="{{ name }}">
+                    <div class="flex flex-col justify-center p-5">
+                        <span>{{ name }}</p>
+                        <span class="font-bold">Elo: {{ rating }}</p>
+                    </div>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+</body>
+
+</html>
