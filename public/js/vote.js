@@ -15,15 +15,14 @@ function voteImg(e) {
   // if (parseInt(winnerWins) + 1 >= 5) return updateImages(winner);
   $.ajax({
     type: "POST",
-    url: "/vote/meme",
+    url: location.pathname + "/vote",
     data: {
       winner: winner,
       loser: loser,
     },
     success: function (res) {
-      $(".images").not(
-        e
-      )[0].outerHTML = `<img onclick="voteImg(this)" class="images" width="500" height="500" src="${res.url}" alt="${res.name}" />`;
+      if(location.pathname === '/memes') return $(".images").not(e)[0].outerHTML = `<img onclick="voteImg(this)" class="images" width="500" height="500" src="${res.url}" alt="${res.name}" />`;
+      return $(".images").not(e)[0].outerHTML = `<img onclick="voteImg(this)" class="images" width="500" height="500" src="https://this-person-does-not-exist.com${res.url}" alt="${res.name}" />`;
     },
   });
 }
