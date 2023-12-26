@@ -16,10 +16,12 @@ app.set("views", __dirname + "/views");
 const memes = require("../routes/memes.js");
 const females = require("../routes/females.js");
 const males = require("../routes/males.js");
+const famous = require("../routes/famous.js");
 
 app.use("/memes", memes);
 app.use("/female", females);
 app.use("/male", males);
+app.use("/famous", famous);
 
 app.listen(port, () => {
   loginMongoose.init();

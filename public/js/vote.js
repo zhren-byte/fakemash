@@ -21,8 +21,8 @@ function voteImg(e) {
       loser: loser,
     },
     success: function (res) {
-      if(location.pathname === '/memes') return $(".images").not(e)[0].outerHTML = `<img onclick="voteImg(this)" class="images" width="500" height="500" src="${res.url}" alt="${res.name}" />`;
-      return $(".images").not(e)[0].outerHTML = `<img onclick="voteImg(this)" class="images" width="500" height="500" src="https://this-person-does-not-exist.com${res.url}" alt="${res.name}" />`;
+      if(location.pathname === '/memes') return $(".images").not(e)[0].outerHTML = `<img onclick="voteImg(this)" class="images" class="images w-96 h-96" src="${res.url}" alt="${res.name}" />`;
+      return $(".images").not(e)[0].outerHTML = `<img onclick="voteImg(this)" class="images w-96 h-96" src="${res.url}" alt="${res.name}" />`;
     },
   });
 }
@@ -34,12 +34,12 @@ async function updateImages(winner) {
 
     $(
       ".images"
-    )[0].outerHTML = `<img onclick="voteImg(this)" class="images" width="500" height="500" src="${
+    )[0].outerHTML = `<img onclick="voteImg(this)" class="images w-96 h-96" src="${
       "https://this-person-does-not-exist.com/" + newImages[0].url
     }" alt="${newImages[0].url}" />`;
     $(
       ".images"
-    )[1].outerHTML = `<img onclick="voteImg(this)" class="images" width="500" height="500" src="${
+    )[1].outerHTML = `<img onclick="voteImg(this)" class="images w-96 h-96" src="${
       "https://this-person-does-not-exist.com/" + newImages[1].url
     }" alt="${newImages[1].url}" />`;
 
