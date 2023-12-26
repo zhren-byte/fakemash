@@ -1,0 +1,42 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {{titulo}}
+    </title>
+    <link href="/styles/output.css" rel="stylesheet" />
+    <script
+      src="https://code.jquery.com/jquery-3.7.0.min.js"
+      integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="flex h-full flex-col">
+    <nav class="w-full bg-red-500 px-8 py-3">
+      <span class="text-2xl text-white">
+        {{titulo}}
+      </span>
+    </nav>
+    <div class="w-full flex flex-row justify-around items-center h-full">
+      <img
+        onclick="voteImg(this)"
+        class="images"
+        width="500"
+        height="500"
+        src="{{memeGif1}}"
+        alt="{{meme1}}"
+      />
+      <img
+        onclick="voteImg(this)"
+        class="images"
+        width="500"
+        height="500"
+        src="{{memeGif2}}"
+        alt="{{meme2}}"
+      />
+    </div>
+    <script src="/js/vote.js"></script>
+  </body>
+</html>

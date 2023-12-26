@@ -27,9 +27,16 @@ const maleSchema = new mongoose.Schema({
   name: String,
   rating: Number,
 });
+const memeSchema = new mongoose.Schema({
+  url: String,
+  name: String,
+  rating: Number,
+});
 
 const Female = mongoose.model('Female', femaleSchema); 
 const Male = mongoose.model('Male', maleSchema); 
+const Meme = mongoose.model('Meme', memeSchema); 
+
 const K = 32;
 
 const bodyParser = require('body-parser')
@@ -39,15 +46,30 @@ app.use("/js", express.static('public/js'));
 app.set('view engine', 'hbs');
 app.set("views", __dirname + "/views");
 
-app.get("/", async (req, res) => {
+app.get("/female", async (req, res) => {
   try {
-    const randomImage = await Male.aggregate([{ $sample: { size: 2 } }]);
+    const randomImage = await Female.aggregate([{ $sample: { size: 2 } }]);
     res.render('index', {
       titulo: 'FakeMash',
       girlImg1: `https://this-person-does-not-exist.com/${randomImage[0].url}`,
       girl1: randomImage[0].name,
       girlImg2: `https://this-person-does-not-exist.com/${randomImage[1].url}`,
       girl2: randomImage[1].name,
+    });
+  } catch (error) {
+    console.error('Error al obtener las imágenes:', error);
+    res.status(500).send('Error interno del servidor');
+  }
+});
+app.get("/memes", async (req, res) => {
+  try {
+    const randomImage = await Meme.aggregate([{ $sample: { size: 2 } }]);
+    res.render('meme', {
+      titulo: 'MemeMash',
+      memeGif1: randomImage[0].url,
+      meme1: randomImage[0].name,
+      memeGif2: randomImage[1].url,
+      meme: randomImage[1].name,
     });
   } catch (error) {
     console.error('Error al obtener las imágenes:', error);
@@ -121,6 +143,34 @@ app.post("/vote/male", async (req, res) => {
   }
 });
 
+app.post("/vote/meme", async (req, res) => {
+  try {
+    const { winner, loser } = req.body;
+
+    // Recupera las imágenes desde la base de datos
+    const imageWinner = await Meme.findOne({ name: winner });
+    const imageLoser = await Meme.findOne({ name: loser });
+
+    // Actualiza las calificaciones basadas en el resultado del voto
+    if (imageWinner != undefined && imageLoser != undefined) {
+      // Calcula las expectativas (Ea y Eb) utilizando la fórmula de Elo rating
+      const Ea = 1 / (1 + 10 ** ((imageLoser.rating - imageWinner.rating) / 400));
+      const Eb = 1 / (1 + 10 ** ((imageWinner.rating - imageLoser.rating) / 400));
+      imageWinner.rating += K * (1 - Ea);
+      imageLoser.rating += K * (0 - Eb);
+      // Guarda las nuevas calificaciones en la base de datos
+      await imageWinner.save();
+      await imageLoser.save();
+    }
+    // Devuelve un documento de la base de datos
+    const randomImage = await Meme.aggregate([{ $sample: { size: 1 } }]);
+    res.send(randomImage[0])
+  } catch (error) {
+    console.error('Error al procesar el voto:', error);
+    res.status(500).send('Error interno del servidor');
+  }
+});
+
 app.get("/generate-images/female/:count", async (req, res) => {
   try {
     const count = parseInt(req.params.count);
@@ -155,6 +205,24 @@ app.get("/generate-images/male/:count", async (req, res) => {
     console.error('Error al crear las imágenes:', error);
   }
 });
+app.get("/generate-images/memes", async (req, res) => {
+  const search = req.query.search;
+  try {
+    const count = 10;
+    const response = await axios.get(`https://tenor.googleapis.com/v2/search?q=${search}&key=${process.env.TENOR_KEY}&client_key=my_test_app&limit=${count}`);
+    console.log(response)
+    for(let i = 0; i < count; i++){
+      await Meme.findOneAndUpdate(
+        { url: response.data.results[i].media_formats.gif.url },
+        { $setOnInsert: { url: response.data.results[i].media_formats.gif.url, name: response.data.results[i].content_description, rating: 1000 } },
+        { upsert: true, new: true }
+      );
+    }
+    res.send("Generacion finalizada")
+  } catch (error) {
+    console.error('Error al crear las imágenes:', error);
+  }
+});
 
 app.get("/ranking/female", async (req, res) => {
   try {
@@ -181,6 +249,21 @@ app.get("/ranking/male", async (req, res) => {
     // }));
     // Renderizar la plantilla de ranking con la lista de imágenes
     res.render('ranking', { titulo: 'Top 10 Elo Ranking Male', ranking: topImages });
+  } catch (error) {
+    console.error('Error al obtener el ranking:', error);
+    res.status(500).send('Error interno del servidor');
+  }
+});
+app.get("/ranking/memes", async (req, res) => {
+  try {
+    // Obtener las 10 imágenes con el Elo más alto
+    const topImages = await Meme.find().sort({ rating: -1 }).limit(10);
+    // const cleanedTopImages = topImages.map(image => ({
+    //   ...image.toObject(),
+    //   name: image.name.replace(/^avatar-gen/, '').replace(/\.jpg$/, '')
+    // }));
+    // Renderizar la plantilla de ranking con la lista de imágenes
+    res.render('ranking', { titulo: 'Top 10 Elo Ranking Memes', ranking: topImages });
   } catch (error) {
     console.error('Error al obtener el ranking:', error);
     res.status(500).send('Error interno del servidor');
