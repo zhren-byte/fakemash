@@ -1,0 +1,20 @@
+{{> header title=titulo}}
+{{!-- <div class="w-full flex flex-row justify-around items-center h-full">
+  <img onclick="voteImg(this)" class="images" width="500" height="500" src="{{girlImg1}}" alt="{{girl1}}" />
+  <img onclick="voteImg(this)" class="images" width="500" height="500" src="{{girlImg2}}" alt="{{girl2}}" />
+</div>
+<script src="/js/vote.js"></script>
+</body>
+
+</html> --}}
+
+<div class="w-full flex flex-row justify-around items-center h-full"> 
+  {{#each images}} 
+  <img onclick="voteImg(this)" class="images" width="500" height="500" src="{{ img }}" alt="{{ name }}">
+  {{/each}} 
+</div>
+
+<script src="/js/vote.js"></script>
+</body>
+
+</html>

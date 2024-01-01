@@ -1,42 +1,60 @@
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-      {{titulo}}
-    </title>
-    <link href="/styles/output.css" rel="stylesheet" />
-    <script
-      src="https://code.jquery.com/jquery-3.7.0.min.js"
-      integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
-      crossorigin="anonymous"
-    ></script>
-  </head>
-
-  <body class="flex h-full flex-col">
-    <nav class="w-full bg-red-500 px-8 py-3">
-      <span class="text-2xl text-white">
-        {{titulo}}
-      </span>
-    </nav>
-    <div class="w-full flex flex-row justify-around items-center h-full">
-      <img
-        onclick="voteImg(this)"
-        class="images"
-        width="500"
-        height="500"
-        src="{{girlImg1}}"
-        alt="{{girl1}}"
-      />
-      <img
-        onclick="voteImg(this)"
-        class="images"
-        width="500"
-        height="500"
-        src="{{girlImg2}}"
-        alt="{{girl2}}"
-      />
+{{> header title=titulo}}
+<main class="flex flex-col items-center space-y-8 p-8">
+    <h1 class="text-2xl font-bold text-center">Choose a category</h1>
+    <div class="w-full max-w-md grid grid-cols-2 gap-4">
+        <div class="rounded-lg border bg-card text-card-foreground shadow-sm w-full" data-v0-t="card">
+            <div class="flex flex-col space-y-1.5 p-6">
+                <h3 class="text-2xl font-semibold leading-none tracking-tight text-center">Women</h3>
+            </div>
+            <div class="p-6 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg></div>
+            <p class="text-center">Select between two women</p>
+        </div>
+        <div class="rounded-lg border bg-card text-card-foreground shadow-sm w-full" data-v0-t="card">
+            <div class="flex flex-col space-y-1.5 p-6">
+                <h3 class="text-2xl font-semibold leading-none tracking-tight text-center">Men</h3>
+            </div>
+            <div class="p-6 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg></div>
+            <p class="text-center">Select between two men</p>
+        </div>
+        <div class="rounded-lg border bg-card text-card-foreground shadow-sm w-full" data-v0-t="card">
+            <div class="flex flex-col space-y-1.5 p-6">
+                <h3 class="text-2xl font-semibold leading-none tracking-tight text-center">Celebrities</h3>
+            </div>
+            <div class="p-6 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                    <polygon
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                    </polygon>
+                </svg></div>
+            <p class="text-center">Select between two celebrities</p>
+        </div>
+        <div class="rounded-lg border bg-card text-card-foreground shadow-sm w-full" data-v0-t="card">
+            <div class="flex flex-col space-y-1.5 p-6">
+                <h3 class="text-2xl font-semibold leading-none tracking-tight text-center">Memes</h3>
+            </div>
+            <div class="p-6 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                    height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                    <line x1="9" x2="9.01" y1="9" y2="9"></line>
+                    <line x1="15" x2="15.01" y1="9" y2="9"></line>
+                </svg></div>
+            <p class="text-center">Select between two memes</p>
+        </div>
     </div>
-    <script src="/js/vote.js"></script>
-  </body>
+</main>
+</body>
+
 </html>

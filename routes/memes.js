@@ -5,14 +5,20 @@ const Meme = require("../models/meme");
 const K = 32;
 
 router.get("/", async function (req, res) {
+  res.render("searchMeme", {
+    titulo: "MemeMash",
+  });
+});
+
+router.get("/meme", async function (req, res) {
   try {
-    const randomImage = await Meme.aggregate([{ $sample: { size: 2 } }]);
+    // const randomImage = await Meme.aggregate([{ $sample: { size: 2 } }]);
     res.render("meme", {
       titulo: "MemeMash",
-      memeGif1: randomImage[0].url,
-      meme1: randomImage[0].name,
-      memeGif2: randomImage[1].url,
-      meme: randomImage[1].name,
+      // memeGif1: randomImage[0].url,
+      // meme1: randomImage[0].name,
+      // memeGif2: randomImage[1].url,
+      // meme: randomImage[1].name,
     });
   } catch (error) {
     console.error("Error al obtener las imágenes:", error);
@@ -50,8 +56,9 @@ router.post("/vote", async (req, res) => {
   }
 });
 
-router.get("/generate-images", async (req, res) => {
-  const search = req.query.search;
+router.post("/generate-images", async (req, res) => {
+  const search = req.body.search;
+  if(!search) return;
   try {
     const count = 10;
     const response = await axios.get(
@@ -70,9 +77,10 @@ router.get("/generate-images", async (req, res) => {
         { upsert: true, new: true }
       );
     }
-    res.send("Generacion finalizada");
+    res.send(search);
   } catch (error) {
-    console.error("Error al crear las imágenes:", error);
+    res.status(500).send("Error interno del servidor");
+    // console.error("Error al crear las imágenes:", error);
   }
 });
 

@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-const gender = require('gender');
+const gender = require("gender");
 
-const famousData = require('../json/famous.json');
+const famousData = require("../json/famous.json");
 const Famous = require("../models/famous");
 
 const K = 32;
@@ -11,8 +11,8 @@ const K = 32;
 router.get("/female", async (req, res) => {
   try {
     const randomFemale = await Famous.aggregate([
-      { $match: { gender: 'female' } },
-      { $sample: { size: 2 } }
+      { $match: { gender: "female" } },
+      { $sample: { size: 2 } },
     ]);
     res.render("index", {
       titulo: "FakeMash",
@@ -26,19 +26,45 @@ router.get("/female", async (req, res) => {
     res.status(500).send("Error interno del servidor");
   }
 });
+
+// router.get("/male", async (req, res) => {
+//   try {
+//     const randomMale = await Famous.aggregate([
+//       { $match: { gender: "male" } },
+//       { $sample: { size: 2 } },
+//     ]);
+//     res.render("index", {
+//       titulo: "FakeMash",
+//       girlImg1: `${randomMale[0].url}`,
+//       girl1: randomMale[0].name,
+//       girlImg2: `${randomMale[1].url}`,
+//       girl2: randomMale[1].name,
+//     });
+//   } catch (error) {
+//     console.error("Error al obtener las imágenes:", error);
+//     res.status(500).send("Error interno del servidor");
+//   }
+// });
+
+//new code
 router.get("/male", async (req, res) => {
   try {
     const randomMale = await Famous.aggregate([
-      { $match: { gender: 'male' } },
-      { $sample: { size: 2 } }
+      { $match: { gender: "male" } },
+      { $sample: { size: 2 } },
     ]);
-    res.render("index", {
-      titulo: "FakeMash",
-      girlImg1: `${randomMale[0].url}`,
-      girl1: randomMale[0].name,
-      girlImg2: `${randomMale[1].url}`,
-      girl2: randomMale[1].name,
-    });
+    if (randomMale.length >= 2) {
+      const imagesContext = randomMale.map((famous, index) => ({
+        img: `${famous.url}`,
+        name: famous.name,
+        id: index + 1,
+      }));
+      res.render("index", { titulo: "FakeMash", images: imagesContext });
+    } else {
+      res
+        .status(404)
+        .send("No hay suficientes famosos masculinos en la base de datos.");
+    }
   } catch (error) {
     console.error("Error al obtener las imágenes:", error);
     res.status(500).send("Error interno del servidor");
@@ -68,8 +94,8 @@ router.post("/male/vote", async (req, res) => {
     }
     // Devuelve un documento de la base de datos
     const randomImage = await Famous.aggregate([
-      { $match: { gender: 'male' } },
-      { $sample: { size: 1 } }
+      { $match: { gender: "male" } },
+      { $sample: { size: 1 } },
     ]);
     res.send(randomImage[0]);
   } catch (error) {
@@ -100,8 +126,8 @@ router.post("/female/vote", async (req, res) => {
     }
     // Devuelve un documento de la base de datos
     const randomImage = await Famous.aggregate([
-      { $match: { gender: 'female' } },
-      { $sample: { size: 1 } }
+      { $match: { gender: "female" } },
+      { $sample: { size: 1 } },
     ]);
     res.send(randomImage[0]);
   } catch (error) {
@@ -114,22 +140,26 @@ router.get("/generate-famous", async (req, res) => {
   famousData.forEach(async (famous) => {
     // Estimar el género basándose en el nombre
     const estimatedGender = gender.guess(famous.name).gender;
-  
+
     // Crear un objeto con el nombre y el género
-    const name = famous.name.toLowerCase().split(' ')
+    const name = famous.name.toLowerCase().split(" ");
     const famousToInsert = {
       url: `https://www.famousbirthdays.com/faces/${name[1]}-${name[0]}-image.jpg`,
       name: famous.name,
       gender: estimatedGender,
-      rating: 1000
+      rating: 1000,
     };
-  
+
     // Insertar en la base de datos
     try {
       await Famous.create(famousToInsert);
-      console.log(`Famoso insertado en la base de datos: ${famousToInsert.name}`);
+      console.log(
+        `Famoso insertado en la base de datos: ${famousToInsert.name}`
+      );
     } catch (error) {
-      console.error(`Error al insertar famoso ${famousToInsert.name}: ${error}`);
+      console.error(
+        `Error al insertar famoso ${famousToInsert.name}: ${error}`
+      );
     }
   });
 });

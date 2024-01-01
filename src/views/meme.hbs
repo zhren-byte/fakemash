@@ -1,38 +1,18 @@
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-      {{titulo}}
-    </title>
-    <link href="/styles/output.css" rel="stylesheet" />
-    <script
-      src="https://code.jquery.com/jquery-3.7.0.min.js"
-      integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
-      crossorigin="anonymous"
-    ></script>
-  </head>
-
-  <body class="flex h-full flex-col">
-    <nav class="w-full bg-red-500 px-8 py-3">
-      <span class="text-2xl text-white">
-        {{titulo}}
-      </span>
-    </nav>
-    <div class="w-full flex flex-col justify-around items-center h-full md:flex-row">
-      <img
-        onclick="voteImg(this)"
-        class="images w-96 h-96 md:h-fit md:w-fit"
-        src="{{memeGif1}}"
-        alt="{{meme1}}"
-      />
-      <img
-        onclick="voteImg(this)"
-        class="images w-96 h-96"
-        src="{{memeGif2}}"
-        alt="{{meme2}}"
-      />
+{{> header title=titulo}}
+<main class="flex flex-col items-center space-y-8 p-8">
+  <div class="w-full max-w-md flex justify-between items-center">
+    <div class="rounded-lg border bg-card text-card-foreground shadow-sm w-5/12" data-v0-t="card">
+      <div class="p-6 flex items-center justify-center"><img onclick="voteImg(this)" src="{{memeGif1}}" alt="{{meme1}}"
+          width="300" height="300" style="aspect-ratio: 300 / 300; object-fit: cover;" /></div>
     </div>
-    <script src="/js/vote.js"></script>
-  </body>
+    <p class="text-xl font-bold">or</p>
+    <div class="rounded-lg border bg-card text-card-foreground shadow-sm w-5/12" data-v0-t="card">
+      <div class="p-6 flex items-center justify-center"><img onclick="voteImg(this)" src="{{memeGif2}}" alt="{{meme2}}"
+          width="300" height="300" style="aspect-ratio: 300 / 300; object-fit: cover;" /></div>
+    </div>
+  </div>
+</main>
+<script src="/js/vote.js"></script>
+</body>
+
 </html>
